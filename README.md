@@ -5,7 +5,7 @@ Relay HTTPS de salida con IP reservada de Oracle Cloud para la integración de G
 ## Instalación
 
 1. Crear una VM Ubuntu en Oracle y asociarle una IP pública reservada.
-2. Apuntar `galeno-relay.seguroatiempo.com` a esa IP.
+2. Configurar la IP reservada como `RELAY_ADDRESS`. Caddy obtiene y renueva automáticamente un certificado público de corta duración para la IP mediante Let's Encrypt; no hace falta modificar DNS.
 3. Permitir entrada TCP 22 desde la IP administrativa y TCP 80/443 desde Internet.
 4. Clonar este repositorio y ejecutar:
 
@@ -26,7 +26,7 @@ sudo docker compose pull
 sudo docker compose up -d --build
 ```
 
-El health check público es `GET /health` y no realiza solicitudes a Galeno.
+El health check público es `GET https://<IP-reservada>/health` y no realiza solicitudes a Galeno.
 
 ## Reconstrucción
 

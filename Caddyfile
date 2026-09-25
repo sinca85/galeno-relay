@@ -1,5 +1,11 @@
-{$RELAY_DOMAIN} {
+{$RELAY_ADDRESS} {
   encode zstd gzip
+  tls {
+    issuer acme {
+      ca https://acme-v02.api.letsencrypt.org/directory
+      profile shortlived
+    }
+  }
   reverse_proxy relay:3000
   header {
     Strict-Transport-Security "max-age=31536000; includeSubDomains"
@@ -10,4 +16,3 @@
     format json
   }
 }
-

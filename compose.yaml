@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     depends_on: [relay]
     environment:
-      RELAY_DOMAIN: ${RELAY_DOMAIN:?Set RELAY_DOMAIN in .env}
+      RELAY_ADDRESS: ${RELAY_ADDRESS:?Set RELAY_ADDRESS in .env}
     ports:
       - "80:80"
       - "443:443"
@@ -29,4 +29,3 @@ networks:
 volumes:
   caddy_data:
   caddy_config:
-
