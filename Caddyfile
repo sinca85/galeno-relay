@@ -1,8 +1,11 @@
+{
+  default_sni {$RELAY_ADDRESS}
+}
+
 {$RELAY_ADDRESS} {
   encode zstd gzip
   tls {
-    issuer acme {
-      ca https://acme-v02.api.letsencrypt.org/directory
+    issuer acme https://acme-v02.api.letsencrypt.org/directory {
       profile shortlived
     }
   }

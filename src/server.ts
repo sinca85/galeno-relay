@@ -68,11 +68,13 @@ export function createRelayServer() {
         "content-type": upstream.headers.get("content-type") ?? "application/json; charset=utf-8",
         "cache-control": "no-store",
         "content-length": String(payload.length),
+        "x-galeno-relay-status": "forwarded",
       });
       response.end(payload);
     } catch (error) {
       if (error instanceof Error && error.message === "BODY_TOO_LARGE") return json(response, 413, { error: "Payload too large" });
       console.error("Relay upstream failure", { name: error instanceof Error ? error.name : "UnknownError" });
+      response.setHeader("x-galeno-relay-status", "unavailable");
       return json(response, 502, { error: "Upstream unavailable" });
     }
   });
@@ -81,4 +83,3 @@ export function createRelayServer() {
 if (process.env.NODE_ENV !== "test") {
   createRelayServer().listen(port, "0.0.0.0", () => console.log(`Galeno relay listening on port ${port}`));
 }
-
