@@ -1,0 +1,32 @@
+services:
+  relay:
+    build: .
+    restart: unless-stopped
+    environment:
+      RELAY_TOKEN: ${RELAY_TOKEN:?Set RELAY_TOKEN in .env}
+      GALENO_ORIGIN: ${GALENO_ORIGIN:-https://www.gsbeneficios.com.ar}
+      GALENO_PATH_PREFIX: ${GALENO_PATH_PREFIX:-/WS-Seguros-desa/}
+    networks: [internal]
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [relay]
+    environment:
+      RELAY_DOMAIN: ${RELAY_DOMAIN:?Set RELAY_DOMAIN in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [internal]
+
+networks:
+  internal:
+
+volumes:
+  caddy_data:
+  caddy_config:
+
