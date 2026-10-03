@@ -60,7 +60,7 @@ export function createRelayServer() {
         },
         body: body?.length ? body : undefined,
         redirect: "manual",
-        signal: AbortSignal.timeout(20_000),
+        signal: AbortSignal.timeout(55_000),
       });
       const payload = Buffer.from(await upstream.arrayBuffer());
       response.writeHead(upstream.status, {
