@@ -5,7 +5,6 @@ services:
     environment:
       RELAY_TOKEN: ${RELAY_TOKEN:?Set RELAY_TOKEN in .env}
       GALENO_ORIGIN: ${GALENO_ORIGIN:-https://www.gsbeneficios.com.ar}
-      GALENO_PATH_PREFIX: ${GALENO_PATH_PREFIX:-/WS-Seguros-desa/}
     networks: [internal]
 
   caddy:

@@ -5,12 +5,11 @@ import { fetch } from "undici";
 const port = Number(process.env.PORT ?? 3000);
 const relayToken = process.env.RELAY_TOKEN ?? "";
 const galenoOrigin = new URL(process.env.GALENO_ORIGIN ?? "https://www.gsbeneficios.com.ar");
-const allowedPrefix = process.env.GALENO_PATH_PREFIX ?? "/WS-Seguros-desa/";
+const allowedPrefixes = ["/WS-Seguros-desa/", "/WS-Seguros/"] as const;
 const maxBodyBytes = 1_000_000;
 
 if (relayToken.length < 32) throw new Error("RELAY_TOKEN must contain at least 32 characters");
 if (galenoOrigin.protocol !== "https:" || galenoOrigin.pathname !== "/") throw new Error("GALENO_ORIGIN must be an HTTPS origin without a path");
-if (!allowedPrefix.startsWith("/") || !allowedPrefix.endsWith("/") || allowedPrefix.includes("..")) throw new Error("Invalid GALENO_PATH_PREFIX");
 
 function json(response: ServerResponse, status: number, body: Record<string, unknown>) {
   response.writeHead(status, { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" });
@@ -47,7 +46,7 @@ export function createRelayServer() {
 
     const incoming = new URL(request.url, "http://relay.internal");
     const targetPath = `/${incoming.pathname.slice("/relay/".length)}`;
-    if (!targetPath.startsWith(allowedPrefix) || targetPath.includes("..") || targetPath.includes("%2e")) return json(response, 403, { error: "Destination not allowed" });
+    if (!allowedPrefixes.some(prefix => targetPath.startsWith(prefix)) || targetPath.includes("..") || targetPath.toLowerCase().includes("%2e")) return json(response, 403, { error: "Destination not allowed" });
     const target = new URL(`${targetPath}${incoming.search}`, galenoOrigin);
 
     try {

@@ -1,6 +1,6 @@
 # Galeno Relay
 
-Relay HTTPS de salida con IP reservada de Oracle Cloud para la integración de Galeno. Acepta únicamente `GET` y `POST` autenticados hacia rutas del sandbox bajo `/WS-Seguros-desa/`; no funciona como proxy abierto.
+Relay HTTPS de salida con IP reservada de Oracle Cloud para la integración de Galeno. Acepta únicamente `GET` y `POST` autenticados hacia las rutas oficiales `/WS-Seguros-desa/` (sandbox) y `/WS-Seguros/` (producción); no funciona como proxy abierto.
 
 ## Instalación
 
